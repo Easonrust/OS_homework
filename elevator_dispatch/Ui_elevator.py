@@ -1,0 +1,79 @@
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file 'd:\OScode\elevater.ui'
+#
+# Created by: PyQt5 UI code generator 5.11.3
+#
+# WARNING! All changes made in this file will be lost!
+
+from PyQt5 import QtCore, QtGui, QtWidgets
+from threading import Thread
+from controller import ElevatorController, Controller
+import time
+
+# 用于显示整个电梯系统
+
+
+class Ui_Form(object):
+    def setupUi(self, Form):
+        Form.resize(1800, 758)
+        font = QtGui.QFont()
+        font.setStrikeOut(False)
+        Form.setFont(font)
+
+        # 楼层数
+        self.verticalLayoutWidget_2 = QtWidgets.QWidget(Form)
+        self.verticalLayoutWidget_2.setGeometry(QtCore.QRect(0, 20, 222, 720))
+        self.gridLayout = QtWidgets.QGridLayout(self.verticalLayoutWidget_2)
+        self.gridLayout.setContentsMargins(0, 0, 0, 0)
+        self.floor = []
+        for i in range(20):
+            self.floor.append(QtWidgets.QLabel(self.verticalLayoutWidget_2))
+            self.floor[i].setStyleSheet("border-width:1px;border-style:solid")
+            self.floor[i].setText(str(i+1))
+            self.gridLayout.addWidget(self.floor[i], 21-i, 2, 1, 1)
+
+        # 添加每层的开关
+        self.floorButton = [[] for i in range(20)]
+        for i in range(20):
+            for j in range(2):
+                self.floorButton[i].append(
+                    QtWidgets.QPushButton(self.verticalLayoutWidget_2))
+                self.gridLayout.addWidget(
+                    self.floorButton[i][j], 21-i, j, 1, 1)
+                if j == 0:
+                    self.floorButton[i][j].setText(("↑"))
+                    if not i == 19:
+                        self.floorButton[i][j].setCheckable(True)
+                        self.floorButton[i][j].setStyleSheet(
+                            "QPushButton:checked{color:yellow}")
+                else:
+                    self.floorButton[i][j].setText(("↓"))
+                    if not i == 0:
+                        self.floorButton[i][j].setCheckable(True)
+                        self.floorButton[i][j].setStyleSheet(
+                            "QPushButton:checked{color:yellow}")
+
+         # 电梯总控制器
+        self.controller = Controller(Form)
+        t0 = Thread(target=self.condition_show, args=())
+        t0.start()
+        elevatorThread = []
+        for i in range(5):
+            elevatorThread.append(
+                Thread(target=self.controller.elevatorController[i].run, args=()))
+            elevatorThread[i].start()
+
+        QtCore.QMetaObject.connectSlotsByName(Form)
+
+    def condition_show(self):
+        while True:
+            for i in range(5):
+
+                # 电梯所在楼层数显示
+                self.controller.elevatorController[i].floorNum.display(
+                    int(self.controller.elevatorController[i].current_floor))
+
+                # UI电梯更改位置
+                self.controller.elevatorController[i].room.setValue(
+                    int(self.controller.elevatorController[i].current_floor))
