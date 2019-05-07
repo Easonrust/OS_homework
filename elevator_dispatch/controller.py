@@ -1,14 +1,14 @@
-from elevator_controller import ElevatorController
+from elevator import Elevator
 
 
 # 总控制器类，负责调度5部电梯
 class Controller(object):
     def __init__(self, Form):
 
-        # 将5个电梯控制器加入到总控中
-        self.elevatorController = []
+        # 将5个电梯加入到控制器中
+        self.elevator = []
         for i in range(5):
-            self.elevatorController.append(ElevatorController(Form, i))
+            self.elevator.append(Elevator(Form, i))
 
     # 调度函数
 
@@ -30,11 +30,11 @@ class Controller(object):
         for i in range(5):
 
             # 如果该电梯当前行驶会路过该楼层
-            if (min(self.elevatorController[i].current_floor, self.elevatorController[i].destination) < floor) and (floor < max(self.elevatorController[i].current_floor, self.elevatorController[i].destination)) and (self.elevatorController[i].direction == direction):
+            if (min(self.elevator[i].current_floor, self.elevator[i].destination) < floor) and (floor < max(self.elevator[i].current_floor, self.elevator[i].destination)) and (self.elevator[i].direction == direction):
 
                 # 设置该楼层与该电梯之间距离楼层数
                 floor_distance[i] = abs(
-                    self.elevatorController[i].current_floor - floor)
+                    self.elevator[i].current_floor - floor)
 
             # 否则距离楼层数为一大值
             else:
@@ -54,7 +54,7 @@ class Controller(object):
                 if min_index == i:
 
                     # 找到最小距离的运行电梯，更新其楼层请求
-                    self.elevatorController[i].set_floor_request(
+                    self.elevator[i].set_floor_request(
                         floor, direction)
                     break
 
@@ -67,9 +67,9 @@ class Controller(object):
         for i in range(5):
 
             # 判断当前电梯是否空闲
-            if self.elevatorController[i].direction == 0:
+            if self.elevator[i].direction == 0:
                 floor_distance[i] = abs(
-                    self.elevatorController[i].current_floor - floor)
+                    self.elevator[i].current_floor - floor)
             else:
                 floor_distance[i] = 13
          # 寻找5部电梯距离楼层最小值
@@ -83,9 +83,9 @@ class Controller(object):
                 if min_index == i:
 
                     # 找到最小距离的空闲电梯，更新其楼层请求
-                    self.elevatorController[i].set_floor_request(
+                    self.elevator[i].set_floor_request(
                         floor, direction)
-                    self.elevatorController[i].destination = floor
+                    self.elevator[i].destination = floor
                     break
 
             return True  # 找到合适电梯
@@ -93,9 +93,9 @@ class Controller(object):
     # 如果不存在合适的运行电梯且无空闲电梯，设置该请求进入轮转
     def check_rotate(self, floor, direction):
         for i in range(5):
-            if self.elevatorController[i].Rotate_Exist == 0:
-                self.elevatorController[i].Rotate_Exist = 1
-                self.elevatorController[i].Rotate_Destination = floor
-                self.elevatorController[i].floor_request[int(
+            if self.elevator[i].Rotate_Exist == 0:
+                self.elevator[i].Rotate_Exist = 1
+                self.elevator[i].Rotate_Destination = floor
+                self.elevator[i].floor_request[int(
                     floor - 1)] = direction
                 break

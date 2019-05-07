@@ -54,7 +54,7 @@ class Ui_Form(object):
         elevatorThread = []
         for i in range(5):
             elevatorThread.append(
-                Thread(target=self.controller.elevatorController[i].run, args=()))
+                Thread(target=self.controller.elevator[i].run, args=()))
             elevatorThread[i].start()
 
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -64,9 +64,9 @@ class Ui_Form(object):
             for i in range(5):
 
                 # 电梯所在楼层数显示
-                self.controller.elevatorController[i].floorNum.display(
-                    int(self.controller.elevatorController[i].current_floor))
+                self.controller.elevator[i].floorNum.display(
+                    int(self.controller.elevator[i].current_floor))
 
                 # UI电梯更改位置
-                self.controller.elevatorController[i].room.setValue(
-                    int(self.controller.elevatorController[i].current_floor))
+                self.controller.elevator[i].room.setValue(
+                    int(self.controller.elevator[i].current_floor))

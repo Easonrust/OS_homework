@@ -4,7 +4,7 @@ import time
 # 电梯控制器类包括单个电梯的房间、按钮、状态显示、以及控制单个电梯的函数
 
 
-class ElevatorController(object):
+class Elevator(object):
     def __init__(self, Form, elevator_id):
         # 对窗口进行引用
         self.form = Form
