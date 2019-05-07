@@ -85,9 +85,6 @@ class ElevatorController(object):
         # 开门请求 0有 1无
         self.open_request = 0
 
-        # 电梯状态 0空闲 1运行
-        self.condition = 0
-
         # 电梯运行方向 0空闲 1向上 -1向下
         self.direction = 0
 
@@ -115,7 +112,6 @@ class ElevatorController(object):
         if self.destination == self.current_floor:
             self.direction = 0
             self.inCondition.setVisible(False)
-            self.condition = 0     # 电梯停止
         else:
             self.direction = (self.destination - self.current_floor) / \
                 abs(self.destination - self.current_floor)
@@ -126,7 +122,6 @@ class ElevatorController(object):
             else:
                 self.inCondition.setPixmap(
                     QtGui.QPixmap("icon/下.png"))  # 电梯向下运行
-            self.condition = 1
 
     # 更新电梯最终目的地
     def update_destination(self, floor):
@@ -296,7 +291,7 @@ class Controller(object):
         for i in range(5):
 
             # 判断当前电梯是否空闲
-            if self.elevatorController[i].condition == 0:
+            if self.elevatorController[i].direction == 0:
                 distance[i] = abs(
                     self.elevatorController[i].current_floor - floor)
             else:
@@ -314,7 +309,6 @@ class Controller(object):
                     # 找到最小距离的空闲电梯，更新其楼层请求
                     self.elevatorController[i].set_floor_request(
                         floor, direction)
-                    self.elevatorController[i].status = 1
                     self.elevatorController[i].destination = floor
                     break
 
