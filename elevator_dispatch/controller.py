@@ -97,15 +97,15 @@ class ElevatorController(object):
         self.Rotate_Destination = 0  # 轮转楼层
 
     # 房间请求有效时将相应位置置为1
-    def set_room_request(self, f):
-        self.room_request[int(f-1)] = 1
+    def set_room_request(self, floor):
+        self.room_request[int(floor-1)] = 1
     # 楼层请求有效时将相应位置置为1
 
-    def set_floor_request(self, f, direction):
+    def set_floor_request(self, floor, direction):
         if direction == 1:
-            self.floor_request[int(f-1)] = 1
+            self.floor_request[int(floor-1)] = 1
         elif direction == -1:
-            self.floor_request[int(f-1)] = -1
+            self.floor_request[int(floor-1)] = -1
 
     # 更新电梯方向
     def update_direction(self):
@@ -113,8 +113,7 @@ class ElevatorController(object):
             self.direction = 0
             self.inCondition.setVisible(False)
         else:
-            self.direction = (self.destination - self.current_floor) / \
-                abs(self.destination - self.current_floor)
+            self.direction = (self.destination - self.current_floor) / abs(self.destination - self.current_floor)
             self.inCondition.setVisible(True)
             if self.direction == 1:
                 self.inCondition.setPixmap(
@@ -132,14 +131,13 @@ class ElevatorController(object):
     def check_room_request(self, floor):
 
         if floor != self.current_floor:
-            i_direction = (floor - self.current_floor) / \
-                abs(floor - self.current_floor)
+            Direction = (floor - self.current_floor) / abs(floor - self.current_floor)
         else:
             # 电梯已在请求位置
             self.set_room_request(floor)
             return False
 
-        if i_direction*self.direction < 0:
+        if Direction*self.direction < 0:
             # 请求方向与运行方向矛盾
             return False
         else:
@@ -236,44 +234,42 @@ class Controller(object):
 
     def dispatch(self, floor, direction):
         # 首先找最近电梯
-        if not self.find_nearest(floor, direction):
+        if not self.find_nearest_running(floor, direction):
 
                 # 其次找空闲电梯
-            if not self.find_vacant(floor, direction):
+            if not self.find_nearest_vacant(floor, direction):
 
                 # 二者都没有的情况下执行轮转
-                self.find_rotate(floor, direction)
+                self.check_rotate(floor, direction)
 
     # 寻找最近电梯的函数
-    def find_nearest(self, floor, direction):
-        distance = [0 for _ in range(5)]
+    def find_nearest_running(self, floor, direction):
+        floor_distance = [0 for i in range(5)]
         # Calculate the distance between each elevator and destination,100 means
         # the elevator is not running closer to destination
         for i in range(5):
 
             # 如果该电梯当前行驶会路过该楼层
-            if min(self.elevatorController[i].current_floor, self.elevatorController[i].destination) < floor \
-                    < max(self.elevatorController[i].current_floor, self.elevatorController[i].destination) and \
-                    self.elevatorController[i].direction == direction:
+            if (min(self.elevatorController[i].current_floor, self.elevatorController[i].destination) < floor) and (floor< max(self.elevatorController[i].current_floor,self.elevatorController[i].destination)) and (self.elevatorController[i].direction == direction):
 
                 # 设置该楼层与该电梯之间距离楼层数
-                distance[i] = abs(
+                floor_distance[i] = abs(
                     self.elevatorController[i].current_floor - floor)
 
             # 否则距离楼层数为一大值
             else:
-                distance[i] = 100
+                floor_distance[i] = 13
 
         # 寻找5部电梯距离楼层最小值
-        min_distance = min(distance)
+        min_floor_distance = min(floor_distance)
 
         # 5部电梯运行途中不会经过该层
-        if min_distance == 100:
+        if min_floor_distance == 13:
             return False
 
         # 存在运行时经过该层的电梯
         else:
-            min_index = distance.index(min_distance) + 1
+            min_index = floor_distance.index(min_floor_distance) + 1
             for i in range(5):
                 if min_index == i:
 
@@ -285,24 +281,24 @@ class Controller(object):
             return True  # 找到合适电梯
 
     # 寻找空闲电梯
-    def find_vacant(self, floor, direction):
+    def find_nearest_vacant(self, floor, direction):
         # Based on numerical order,find the first vacant elevator
-        distance = [0 for _ in range(5)]
+        floor_distance = [0 for i in range(5)]
         for i in range(5):
 
             # 判断当前电梯是否空闲
             if self.elevatorController[i].direction == 0:
-                distance[i] = abs(
+                floor_distance[i] = abs(
                     self.elevatorController[i].current_floor - floor)
             else:
-                distance[i] = 100
+                floor_distance[i] = 13
          # 寻找5部电梯距离楼层最小值
-        min_distance = min(distance)
+        min_floor_distance = min(floor_distance)
 
-        if min_distance == 100:
+        if min_floor_distance == 13:
             return False
         else:
-            min_index = distance.index(min_distance)
+            min_index = floor_distance.index(min_floor_distance)
             for i in range(5):
                 if min_index == i:
 
@@ -315,10 +311,11 @@ class Controller(object):
             return True  # 找到合适电梯
 
     # 如果不存在合适的运行电梯且无空闲电梯，设置该请求进入轮转
-    def find_rotate(self, floor, direction):
+    def check_rotate(self, floor, direction):
         for i in range(5):
             if self.elevatorController[i].Rotate_Exist == 0:
                 self.elevatorController[i].Rotate_Exist = 1
                 self.elevatorController[i].Rotate_Destination = floor
                 self.elevatorController[i].floor_request[int(
                     floor - 1)] = direction
+                break
