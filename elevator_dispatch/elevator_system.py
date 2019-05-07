@@ -1,8 +1,6 @@
 from Ui_elevator import Ui_Form
 from PyQt5.QtWidgets import QApplication, QMainWindow
 import sys
-from PyQt5 import QtCore, QtGui
-from controller import ElevatorController, Controller
 
 
 class myWindow(QMainWindow, Ui_Form):
@@ -11,11 +9,11 @@ class myWindow(QMainWindow, Ui_Form):
         super(myWindow, self).__init__(parent)
         self.setupUi(self)
 
-        # 五部电梯房间按钮连接函数
+        # 五部电梯房间按钮连接自己的电梯操纵函数函数
         for i in range(5):
             for j in range(20):
                 self.controller.elevatorController[i].roombutton[j].clicked.connect(
-                    self.operate_ele)
+                    self.controller.elevatorController[i].operate_ele)
 
         # 五部电梯开门按钮连接函数
         for i in range(5):
@@ -36,15 +34,6 @@ class myWindow(QMainWindow, Ui_Form):
             if button == self.controller.elevatorController[i].openButton:
                 self.controller.elevatorController[i].open_request = 1
                 break
-
-    # 电梯内部按钮操控函数
-    def operate_ele(self):
-        button = self.sender()
-        for i in range(5):
-            for j in range(20):
-                if button == self.controller.elevatorController[i].roombutton[j]:
-                    self.controller.catch_room_quest(i+1, j+1)
-                    break
 
     # 每层楼的召唤电梯函数
     def call_ele(self):

@@ -1,14 +1,7 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'd:\OScode\elevater.ui'
-#
-# Created by: PyQt5 UI code generator 5.11.3
-#
-# WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from threading import Thread
-from controller import ElevatorController, Controller
+from controller import Controller
 import time
 
 # 用于显示整个电梯系统
