@@ -10,14 +10,6 @@ class Elevator(object):
         self.form = Form
 
         # 电梯的房间
-        '''self.room = QtWidgets.QSlider(Form)
-        self.room.setGeometry(QtCore.QRect(460+320*elevator_id, 20, 60, 720))
-        self.room.setStyleSheet("background-color:rgb(255, 255, 127)")
-        self.room.setMinimum(1)
-        self.room.setMaximum(20)
-        self.room.setSliderPosition(1)
-        self.room.setStyleSheet'''
-
         self.room = QtWidgets.QLabel(Form)
         self.room.setGeometry(QtCore.QRect(443+320*elevator_id, 720, 62, 33))
         self.room.setPixmap(QtGui.QPixmap("icon/电梯.png"))
