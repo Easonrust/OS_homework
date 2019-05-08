@@ -49,8 +49,6 @@ class Ui_Form(object):
 
          # 电梯总控制器
         self.controller = Controller(Form)
-        t0 = Thread(target=self.condition_show, args=())
-        t0.start()
         elevatorThread = []
         for i in range(5):
             elevatorThread.append(
@@ -59,14 +57,4 @@ class Ui_Form(object):
 
         QtCore.QMetaObject.connectSlotsByName(Form)
 
-    def condition_show(self):
-        while True:
-            for i in range(5):
-
-                # 电梯所在楼层数显示
-                self.controller.elevator[i].floorNum.display(
-                    int(self.controller.elevator[i].current_floor))
-
-                # UI电梯更改位置
-                self.controller.elevator[i].room.setValue(
-                    int(self.controller.elevator[i].current_floor))
+  

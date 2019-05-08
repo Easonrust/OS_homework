@@ -4,11 +4,24 @@ from elevator import Elevator
 # 总控制器类，负责调度5部电梯
 class Controller(object):
     def __init__(self, Form):
-
+        self.form=Form
         # 将5个电梯加入到控制器中
         self.elevator = []
         for i in range(5):
-            self.elevator.append(Elevator(Form, i))
+            self.elevator.append(Elevator(self.form, i))
+
+    # 每层楼的召唤电梯函数
+    def call_ele(self):
+        button = self.form.sender()
+        for i in range(20):
+            for j in range(2):
+                if button == self.form.floorButton[i][j]:
+                    if j == 1:
+                        dir = -1
+                    elif j == 0:
+                        dir = 1
+                    self.dispatch(i+1, dir)
+                    break
 
     # 调度函数
 

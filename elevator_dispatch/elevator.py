@@ -10,13 +10,26 @@ class Elevator(object):
         self.form = Form
 
         # 电梯的房间
-        self.room = QtWidgets.QSlider(Form)
+        '''self.room = QtWidgets.QSlider(Form)
         self.room.setGeometry(QtCore.QRect(460+320*elevator_id, 20, 60, 720))
         self.room.setStyleSheet("background-color:rgb(255, 255, 127)")
         self.room.setMinimum(1)
         self.room.setMaximum(20)
         self.room.setSliderPosition(1)
-        self.room.setStyleSheet
+        self.room.setStyleSheet'''
+
+        self.room = QtWidgets.QLabel(Form)
+        self.room.setGeometry(QtCore.QRect(443+320*elevator_id, 720, 62, 33))
+        self.room.setPixmap(QtGui.QPixmap("icon/电梯.png"))
+        self.room.setScaledContents(True)
+        self.l_wall = QtWidgets.QFrame(Form)
+        self.l_wall.setGeometry(QtCore.QRect(430+320*elevator_id, 20, 40, 720))
+        self.l_wall.setFrameShape(QtWidgets.QFrame.VLine)
+        self.l_wall.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.r_wall = QtWidgets.QFrame(Form)
+        self.r_wall.setGeometry(QtCore.QRect(480+320*elevator_id, 20, 40, 720))
+        self.r_wall.setFrameShape(QtWidgets.QFrame.VLine)
+        self.r_wall.setFrameShadow(QtWidgets.QFrame.Sunken)
 
         # 按钮表
         self.gridLayoutWidget = QtWidgets.QWidget(Form)
@@ -195,6 +208,13 @@ class Elevator(object):
                     # 更新目的地
                     self.update_destination(i+1)
                 break
+    
+    # 开门函数
+
+    def open_door(self):
+        button = self.form.sender()
+        if button == self.openButton:
+            self.open_request = 1
 
     # 电梯循环运转函数
     def run(self):
@@ -217,6 +237,15 @@ class Elevator(object):
 
                 # 还原轮转标志
                 self.Rotate_Exist = 0
+            
+             # 电梯所在楼层数显示
+            self.floorNum.display(int(self.current_floor))
 
+            # UI电梯更改位置
+            x=int(self.room.x())
+            y=int(self.form.floor[int(self.current_floor-1)].y())+17
+            self.room.move(x,y)
+            
+            QtWidgets.QApplication.processEvents()
             # 电梯移动速度控制
-            time.sleep(0.5)
+            time.sleep(0.4)
