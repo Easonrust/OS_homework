@@ -33,7 +33,7 @@ class Controller(object):
             if not self.find_nearest_vacant(floor, direction):
 
                 # 二者都没有的情况下执行轮转
-                self.check_rotate(floor, direction)
+                self.set_rotate(floor, direction)
 
     # 寻找最近电梯的函数
     def find_nearest_running(self, floor, direction):
@@ -104,11 +104,10 @@ class Controller(object):
             return True  # 找到合适电梯
 
     # 如果不存在合适的运行电梯且无空闲电梯，设置该请求进入轮转
-    def check_rotate(self, floor, direction):
+    def set_rotate(self, floor, direction):
         for i in range(5):
             if self.elevator[i].Rotate_Exist == 0:
                 self.elevator[i].Rotate_Exist = 1
                 self.elevator[i].Rotate_Destination = floor
-                self.elevator[i].floor_request[int(
-                    floor - 1)] = direction
+                self.elevator[i].floor_request[int(floor - 1)] = direction
                 break

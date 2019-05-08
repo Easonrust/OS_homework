@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import time
 
-# 电梯控制器类包括单个电梯的房间、按钮、状态显示、以及控制单个电梯的函数
+# 电梯类包括单个电梯的房间、按钮、状态显示、以及控制单个电梯的函数
 
 
 class Elevator(object):
@@ -81,13 +81,13 @@ class Elevator(object):
         self.inCondition.setPixmap(QtGui.QPixmap("icon/上.png"))
         self.inCondition.setScaledContents(True)
 
-        # 电梯房间发出的请求 0有 1无
+        # 电梯房间发出的请求 0无 1有
         self.room_request = [0 for i in range(20)]
 
-        # 楼层发出的请求  0有 1无
+        # 楼层发出的请求  0无 1上 -1下
         self.floor_request = [0 for i in range(20)]
 
-        # 开门请求 0有 1无
+        # 开门请求 0无 1有
         self.open_request = 0
 
         # 电梯运行方向 0空闲 1向上 -1向下
@@ -137,14 +137,19 @@ class Elevator(object):
     def check_room_request(self, floor):
 
         if floor != self.current_floor:
-            Direction = (floor - self.current_floor) / \
-                abs(floor - self.current_floor)
+            Direction = (floor - self.current_floor) / abs(floor - self.current_floor)
         else:
             # 电梯已在请求位置
             self.set_room_request(floor)
             return False
 
         if Direction*self.direction < 0:
+            if self.Rotate_Exist == 0:
+                #设置轮转
+                self.Rotate_Exist = 1
+                self.Rotate_Destination = floor
+                self.room_request[int(
+                    floor - 1)] = 1
             # 请求方向与运行方向矛盾
             return False
         else:

@@ -51,8 +51,7 @@ class Ui_Form(object):
         self.controller = Controller(Form)
         elevatorThread = []
         for i in range(5):
-            elevatorThread.append(
-                Thread(target=self.controller.elevator[i].run, args=()))
+            elevatorThread.append(Thread(target=self.controller.elevator[i].run, args=()))
             elevatorThread[i].start()
 
         QtCore.QMetaObject.connectSlotsByName(Form)
