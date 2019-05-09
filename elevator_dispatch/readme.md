@@ -26,7 +26,7 @@
 
 界面右侧为5部电梯，每部电梯包含一套按钮表，其中数字1-20的按钮代表楼层按钮，开关按钮按下后，电梯可在所停楼层开门2秒钟；按钮表上方配备有状态显示栏，用来显示电梯的楼层和运行状态（开门，向上运行，向下运行）；按钮表右侧为电梯房间的图形显示。
 
-![界面](C:\Users\yangl\Desktop\界面.png)
+![界面](https://github.com/Easonrust/OS_homework/blob/master/elevator_dispatch/img/%E7%95%8C%E9%9D%A2.png)
 
 ## 调度算法设计
 
