@@ -34,7 +34,7 @@
 
 ### 楼层按钮事件
 
-用户按下左侧按钮栏某一楼层上或下按钮后，电梯总控制器自动在5部电梯中寻找最合适的电梯，最合适的电梯响应请求后运行到该楼层，电梯总控制器的寻找顺序如下：
+用户按下左侧按钮栏某一楼层上或下按钮后，电梯调度器自动在5部电梯中寻找最合适的电梯，最合适的电梯响应请求后运行到该楼层，电梯调度器的寻找顺序如下：
 
 1. 从正在运行的电梯中进行寻找，找出运行会经过该楼层且离该楼层最近的电梯。若有此类电梯，向其发送请求；否则，进入下一步。
 2. 从空闲状态的电梯中进行寻找，找出离该楼层最近的电梯。若有此类电梯，向其发送请求；否则，进入下一步。
@@ -60,7 +60,7 @@
 
 ### 程序结构设计
 
-共包含4个文件：**elevator.py**, **controller.py**, **Ui_elevator.py**, **controller.py**。
+共包含4个文件：**elevator.py**, **dispatcher.py**, **Ui_elevator.py**, **elevator_system.py**。
 
 #### elevator.py
 
@@ -220,14 +220,14 @@ class Elevator(object):
                 break
 ```
 
-#### controller.py
+#### dispatcher.py
 
-包含`Controller`类，为5部电梯的总控制器。包含成员函数`call_ele(self)`用于连接楼层按键并处理请求;成员函数`find_nearest_running(self,floor,direction)`在运行中电梯中寻找最合适电梯;成员函数`find_nearest_vacant(self,floor,direction)`在空闲电梯中寻找最近电梯；成员函数`set_rotate(self,floor,direction)`用于设置轮转目的地；成员函数`dispatch(self,floor,direction)`负责响应楼层请求后对5部电梯进行调度。
+包含`Dispatcher`类，为5部电梯的总控制器。包含成员函数`call_ele(self)`用于连接楼层按键并处理请求;成员函数`find_nearest_running(self,floor,direction)`在运行中电梯中寻找最合适电梯;成员函数`find_nearest_vacant(self,floor,direction)`在空闲电梯中寻找最近电梯；成员函数`set_rotate(self,floor,direction)`用于设置轮转目的地；成员函数`schedule(self,floor,direction)`负责响应楼层请求后对5部电梯进行调度。
 
 其核心代码如下：
 
 ```python
-class Controller(object):
+class Dispatcher(object):
     def __init__(self, Form):
         self.form=Form
         # 将5个电梯加入到控制器中
@@ -250,7 +250,7 @@ class Controller(object):
 
     # 调度函数
 
-    def dispatch(self, floor, direction):
+    def schedule(self, floor, direction):
         # 首先找最近电梯
         if not self.find_nearest_running(floor, direction):
 
