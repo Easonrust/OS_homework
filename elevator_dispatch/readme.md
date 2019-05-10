@@ -26,7 +26,7 @@
 
 界面右侧为5部电梯，每部电梯包含一套按钮表，其中数字1-20的按钮代表楼层按钮，开关按钮按下后，电梯可在所停楼层开门2秒钟；按钮表上方配备有状态显示栏，用来显示电梯的楼层和运行状态（开门，向上运行，向下运行）；按钮表右侧为电梯房间的图形显示。
 
-![界面](https://github.com/Easonrust/OS_homework/blob/master/elevator_dispatch/img/%E7%95%8C%E9%9D%A2.png)
+![界面](C:\Users\yangl\Desktop\界面.png)
 
 ## 调度算法设计
 
@@ -52,44 +52,33 @@
 
 2. 该楼层不符合电梯运动方向：
 
-   将该楼层记录到轮转目的地中，等到电梯空闲时响应该轮转目的地的请求。
+   a. 若电梯不存在轮转，将该楼层记录到轮转目的地中，接受该楼层请求。
+
+   b. 若电梯存在轮转，接受该楼层请求。
 
 3. 该楼层为电梯当前楼层：
 
    电梯房间发出开门请求。
 
-### 程序结构设计
+## 程序结构设计
 
 共包含4个文件：**elevator.py**, **dispatcher.py**, **Ui_elevator.py**, **elevator_system.py**。
 
-#### elevator.py
+### elevator.py
 
-包含`Elevator`类，封装了一部电梯的按钮，状态显示栏，电梯房间图形；具有电梯运行状态`direction`，目的地`destination`，接受到的楼层请求`floor_request`,接受到的房间按钮请求`room_request`,接受到的开门请求`open_request`,轮转属性等。其成员变量代码如下：
+包含`Elevator`类，封装了一部电梯的按钮，状态显示栏，电梯房间图形；具有电梯运行状态`direction`，目的地`destination`，接受到的楼层请求`floor_request`,接受到的房间按钮请求`room_request`,接受到的开门请求`open_request`,轮转属性等。其成员变量如下，具体代码见附件：
 
 ```python
-class Elevator(object):
-    def __init__(self, Form, elevator_id):
-        # 对窗口进行引用
+		#窗口引用
         self.form = Form
-
         # 电梯的房间
         self.room = QtWidgets.QLabel(Form)
-        self.room.setGeometry(QtCore.QRect(443+320*elevator_id, 720, 62, 33))
-        self.room.setPixmap(QtGui.QPixmap("icon/电梯.png"))
-        self.room.setScaledContents(True)
+        #左墙壁
         self.l_wall = QtWidgets.QFrame(Form)
-        self.l_wall.setGeometry(QtCore.QRect(430+320*elevator_id, 20, 40, 720))
-        self.l_wall.setFrameShape(QtWidgets.QFrame.VLine)
-        self.l_wall.setFrameShadow(QtWidgets.QFrame.Sunken)
+        #右墙壁
         self.r_wall = QtWidgets.QFrame(Form)
-        self.r_wall.setGeometry(QtCore.QRect(480+320*elevator_id, 20, 40, 720))
-        self.r_wall.setFrameShape(QtWidgets.QFrame.VLine)
-        self.r_wall.setFrameShadow(QtWidgets.QFrame.Sunken)
-
         # 按钮表
         self.gridLayoutWidget = QtWidgets.QWidget(Form)
-        self.gridLayoutWidget.setGeometry(
-            QtCore.QRect(240+320*elevator_id, 180, 202, 562))
         self.buttonLayout = QtWidgets.QGridLayout(self.gridLayoutWidget)
         self.buttonLayout.setContentsMargins(0, 0, 0, 0)
         # 按钮
@@ -112,54 +101,26 @@ class Elevator(object):
 
         # 关门按钮
         self.closeButton = QtWidgets.QPushButton(self.gridLayoutWidget)
-        font = QtGui.QFont()
-        font.setPointSize(5)
-        self.closeButton.setFont(font)
-        self.closeButton.setText("><")
-        self.buttonLayout.addWidget(self.closeButton, 10, 1, 1, 1)
-
         # 开门按钮
         self.openButton = QtWidgets.QPushButton(self.gridLayoutWidget)
-        font = QtGui.QFont()
-        font.setPointSize(7)
-        self.openButton.setFont(font)
-        self.openButton.setText("<>")
-        self.buttonLayout.addWidget(self.openButton, 10, 0, 1, 1)
-
         # 报警按钮
         self.warn_button = QtWidgets.QPushButton(self.gridLayoutWidget)
         self.buttonLayout.addWidget(self.warn_button, 11, 0, 1, 2)
         self.warn_button.setText("warn")
-
         # 电梯所在楼层以及行驶状态显示
         self.floorNum = QtWidgets.QLCDNumber(Form)
-        self.floorNum.setGeometry(QtCore.QRect(
-            240+320*elevator_id, 20, 102, 142))
-        self.floorNum.setDigitCount(2)
-        self.floorNum.setProperty("intValue", 1)
         self.inCondition = QtWidgets.QLabel(Form)
-        self.inCondition.setGeometry(
-            QtCore.QRect(340+320*elevator_id, 40, 102, 102))
-        self.inCondition.setText("")
-        self.inCondition.setPixmap(QtGui.QPixmap("icon/上.png"))
-        self.inCondition.setScaledContents(True)
-
         # 电梯房间发出的请求 0无 1有
         self.room_request = [0 for i in range(20)]
-
         # 楼层发出的请求  0无 1上 -1 下
         self.floor_request = [0 for i in range(20)]
-
         # 开门请求 0无 1有
         self.open_request = 0
-
         # 电梯运行方向 0空闲 1向上 -1向下
         self.direction = 0
-
         # 电梯目的地以及初始楼层
         self.current_floor = 1
         self.destination = 1
-
         # 轮转调度
         self.Rotate_Exist = 0  # 0不存在轮转 1存在轮转
         self.Rotate_Destination = 0  # 轮转楼层
@@ -171,33 +132,25 @@ class Elevator(object):
     # 电梯循环运转函数
     def run(self):
         while True:
-
              # 检查是否存在请求
             self.check_open()
             # 不断更新电梯运行状态
             self.update_direction()
-
             if self.direction != 0:
                 # 电梯在运行中
                 self.current_floor += self.direction
                 # self.check_open()
-
             elif not self.Rotate_Exist == 0:
-
                 # 电梯空闲且存在轮转时，执行轮转调度
                 self.destination = self.Rotate_Destination
-
                 # 还原轮转标志
                 self.Rotate_Exist = 0
-            
              # 电梯所在楼层数显示
             self.floorNum.display(int(self.current_floor))
-
             # UI电梯更改位置
             x=int(self.room.x())
             y=int(self.form.floor[int(self.current_floor-1)].y())+17
             self.room.move(x,y)
-            
             QtWidgets.QApplication.processEvents()
             # 电梯移动速度控制
             time.sleep(0.4)
@@ -212,7 +165,6 @@ class Elevator(object):
             if button == self.roombutton[i]:
                 # 检查请求是否有效（请求方向与运行方向相同）
                 if self.check_room_request(i+1):
-
                     # 有效时更新请求列表
                     self.set_room_request(i+1)
                     # 更新目的地
@@ -220,22 +172,31 @@ class Elevator(object):
                 break
 ```
 
-#### dispatcher.py
+`Elevator`类的涉及轮转调度的函数为`check_room_request`,其设置轮转的代码如下：
+
+```python
+if Direction*self.direction < 0:
+            if self.Rotate_Exist == 0:
+                #设置轮转
+                self.Rotate_Exist = 1
+                self.Rotate_Destination = floor
+            if(abs(self.current_floor-floor)>abs(self.current_floor-self.Rotate_Destination)):
+                self.Rotate_Destination = floor
+            self.room_request[int(floor - 1)] = 1
+            # 请求方向与运行方向矛盾
+            return False
+```
+
+
+
+### dispatcher.py
 
 包含`Dispatcher`类，为5部电梯的总控制器。包含成员函数`call_ele(self)`用于连接楼层按键并处理请求;成员函数`find_nearest_running(self,floor,direction)`在运行中电梯中寻找最合适电梯;成员函数`find_nearest_vacant(self,floor,direction)`在空闲电梯中寻找最近电梯；成员函数`set_rotate(self,floor,direction)`用于设置轮转目的地；成员函数`schedule(self,floor,direction)`负责响应楼层请求后对5部电梯进行调度。
 
-其核心代码如下：
+其成员变量为五部电梯`elevator`，其核心函数`call_ele`代码如下：
 
 ```python
-class Dispatcher(object):
-    def __init__(self, Form):
-        self.form=Form
-        # 将5个电梯加入到控制器中
-        self.elevator = []
-        for i in range(5):
-            self.elevator.append(Elevator(self.form, i))
-
-    # 每层楼的召唤电梯函数
+	# 每层楼的召唤电梯函数
     def call_ele(self):
         button = self.form.sender()
         for i in range(20):
@@ -247,88 +208,12 @@ class Dispatcher(object):
                         dir = 1
                     self.dispatch(i+1, dir)
                     break
+```
 
-    # 调度函数
+其涉及轮转调度的函数为`set_rotate`,其代码如下：
 
-    def schedule(self, floor, direction):
-        # 首先找最近电梯
-        if not self.find_nearest_running(floor, direction):
-
-                # 其次找空闲电梯
-            if not self.find_nearest_vacant(floor, direction):
-
-                # 二者都没有的情况下执行轮转
-                self.set_rotate(floor, direction)
-
-    # 寻找最近电梯的函数
-    def find_nearest_running(self, floor, direction):
-        floor_distance = [0 for i in range(5)]
-        # Calculate the distance between each elevator and destination,100 means
-        # the elevator is not running closer to destination
-        for i in range(5):
-
-            # 如果该电梯当前行驶会路过该楼层
-            if (min(self.elevator[i].current_floor, self.elevator[i].destination) < floor) and (floor < max(self.elevator[i].current_floor, self.elevator[i].destination)) and (self.elevator[i].direction == direction):
-
-                # 设置该楼层与该电梯之间距离楼层数
-                floor_distance[i] = abs(
-                    self.elevator[i].current_floor - floor)
-
-            # 否则距离楼层数为一大值
-            else:
-                floor_distance[i] = 13
-
-        # 寻找5部电梯距离楼层最小值
-        min_floor_distance = min(floor_distance)
-
-        # 5部电梯运行途中不会经过该层
-        if min_floor_distance == 13:
-            return False
-
-        # 存在运行时经过该层的电梯
-        else:
-            min_index = floor_distance.index(min_floor_distance) + 1
-            for i in range(5):
-                if min_index == i:
-
-                    # 找到最小距离的运行电梯，更新其楼层请求
-                    self.elevator[i].set_floor_request(
-                        floor, direction)
-                    break
-
-            return True  # 找到合适电梯
-
-    # 寻找空闲电梯
-    def find_nearest_vacant(self, floor, direction):
-        # Based on numerical order,find the first vacant elevator
-        floor_distance = [0 for i in range(5)]
-        for i in range(5):
-
-            # 判断当前电梯是否空闲
-            if self.elevator[i].direction == 0:
-                floor_distance[i] = abs(
-                    self.elevator[i].current_floor - floor)
-            else:
-                floor_distance[i] = 13
-         # 寻找5部电梯距离楼层最小值
-        min_floor_distance = min(floor_distance)
-
-        if min_floor_distance == 13:
-            return False
-        else:
-            min_index = floor_distance.index(min_floor_distance)
-            for i in range(5):
-                if min_index == i:
-
-                    # 找到最小距离的空闲电梯，更新其楼层请求
-                    self.elevator[i].set_floor_request(
-                        floor, direction)
-                    self.elevator[i].destination = floor
-                    break
-
-            return True  # 找到合适电梯
-
-    # 如果不存在合适的运行电梯且无空闲电梯，设置该请求进入轮转
+```python
+# 如果不存在合适的运行电梯且无空闲电梯，设置该请求进入轮转
     def set_rotate(self, floor, direction):
         for i in range(5):
             if self.elevator[i].Rotate_Exist == 0:
@@ -338,15 +223,51 @@ class Dispatcher(object):
                 break
 ```
 
-#### Ui_elevator.py
+### Ui_elevator.py
 
 用于绘制电梯系统界面，采用*qtdesigner*和循环算法相配合的方式。
 
-#### elevator_system.py
+### elevator_system.py
 
 用于设置界面上所有按钮与函数的连接。
 
+## 调度程序测试
 
+### 楼层请求进轮转
 
+测试样例：
 
+![楼层轮转](C:\Users\yangl\Desktop\楼层轮转.png)
 
+此时5部电梯均向上运行，分别在1层，2层，3层按下按钮。
+
+预期结果：第1,2,3部电梯在空闲后响应1,2,3层楼的请求。
+
+实际结果：
+
+![楼层轮转实际结果](C:\Users\yangl\Desktop\楼层轮转实际结果.png)
+
+### 电梯内部轮转
+
+测试样例：
+
+![内部轮转](C:\Users\yangl\Desktop\内部轮转.png)
+
+电梯此时向上运行，在以经过3层的情况下，按下3层的按键。
+
+预期结果：电梯到达20层后返回，响应3层请求。
+
+实际结果：
+
+![内部轮转实际结果](C:\Users\yangl\Desktop\内部轮转实际结果.png)
+
+## 不足之处
+
+1. 楼层请求进轮转算法尚且需要改进。
+2. 程序界面没有利用动画，缺乏观赏性。
+3. 程序可能发生异常退出
+4. 楼层移动时，极少数情况下会导致界面赶不上刷新的问题。
+
+## 开发环境
+
+Python3.7+Pyqt5
