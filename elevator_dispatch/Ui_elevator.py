@@ -1,7 +1,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from threading import Thread
-from controller import Controller
+from dispatcher import Dispatcher
 import time
 
 # 用于显示整个电梯系统
@@ -47,11 +47,11 @@ class Ui_Form(object):
                         self.floorButton[i][j].setStyleSheet(
                             "QPushButton:checked{color:yellow}")
 
-         # 电梯总控制器
-        self.controller = Controller(Form)
+         # 电梯调度器
+        self.dispatcher = Dispatcher(Form)
         elevatorThread = []
         for i in range(5):
-            elevatorThread.append(Thread(target=self.controller.elevator[i].run, args=()))
+            elevatorThread.append(Thread(target=self.dispatcher.elevator[i].run, args=()))
             elevatorThread[i].start()
 
         QtCore.QMetaObject.connectSlotsByName(Form)

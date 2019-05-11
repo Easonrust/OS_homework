@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import time
 
+
 # 电梯类包括单个电梯的房间、按钮、状态显示、以及控制单个电梯的函数
 
 
@@ -12,7 +13,7 @@ class Elevator(object):
         # 电梯的房间
         self.room = QtWidgets.QLabel(Form)
         self.room.setGeometry(QtCore.QRect(443+320*elevator_id, 720, 62, 33))
-        self.room.setPixmap(QtGui.QPixmap("icon/电梯.png"))
+        self.room.setPixmap(QtGui.QPixmap("icon/room.png"))
         self.room.setScaledContents(True)
         self.l_wall = QtWidgets.QFrame(Form)
         self.l_wall.setGeometry(QtCore.QRect(430+320*elevator_id, 20, 40, 720))
@@ -78,7 +79,7 @@ class Elevator(object):
         self.inCondition.setGeometry(
             QtCore.QRect(340+320*elevator_id, 40, 102, 102))
         self.inCondition.setText("")
-        self.inCondition.setPixmap(QtGui.QPixmap("icon/上.png"))
+        self.inCondition.setPixmap(QtGui.QPixmap("icon/up.png"))
         self.inCondition.setScaledContents(True)
 
         # 电梯房间发出的请求 0无 1有
@@ -123,10 +124,10 @@ class Elevator(object):
             self.inCondition.setVisible(True)
             if self.direction == 1:
                 self.inCondition.setPixmap(
-                    QtGui.QPixmap("icon/上.png"))  # 电梯向上运行
+                    QtGui.QPixmap("icon/up.png"))  # 电梯向上运行
             else:
                 self.inCondition.setPixmap(
-                    QtGui.QPixmap("icon/下.png"))  # 电梯向下运行
+                    QtGui.QPixmap("icon/down.png"))  # 电梯向下运行
 
     # 更新电梯最终目的地
     def update_destination(self, floor):
@@ -148,19 +149,20 @@ class Elevator(object):
                 #设置轮转
                 self.Rotate_Exist = 1
                 self.Rotate_Destination = floor
-                self.room_request[int(
-                    floor - 1)] = 1
+            if(abs(self.current_floor-floor)>abs(self.current_floor-self.Rotate_Destination)):
+                self.Rotate_Destination = floor
+            self.room_request[int(floor - 1)] = 1
             # 请求方向与运行方向矛盾
             return False
         else:
             # 满足请求
             return True
 
-    def check_open(self):
+    def check_request(self):
         if self.open_request == 1:
 
             # 检测到开门请求 显示屏显示开门动画2s
-            self.inCondition.setPixmap(QtGui.QPixmap("icon/电梯开门.png"))
+            self.inCondition.setPixmap(QtGui.QPixmap("icon/open.png"))
             self.inCondition.setVisible(True)
             time.sleep(2)
             self.open_request = 0
@@ -172,7 +174,7 @@ class Elevator(object):
             self.roombutton[int(self.current_floor-1)].setChecked(False)
 
             # 显示屏显示开门动画2s
-            self.inCondition.setPixmap(QtGui.QPixmap("icon/电梯开门.png"))
+            self.inCondition.setPixmap(QtGui.QPixmap("icon/open.png"))
             time.sleep(2)
 
             # 请求响应完毕 还原电梯房间请求状态为0
@@ -187,7 +189,7 @@ class Elevator(object):
                 self.current_floor-1)][1].setChecked(False)
 
             # 显示屏显示开门动画2s
-            self.inCondition.setPixmap(QtGui.QPixmap("icon/电梯开门.png"))
+            self.inCondition.setPixmap(QtGui.QPixmap("icon/open.png"))
             time.sleep(2)  # 可加开门动画
 
             # 请求响应完毕 还原电梯房间请求状态为0
@@ -218,18 +220,17 @@ class Elevator(object):
         while True:
 
              # 检查是否存在请求
-            self.check_open()
+            self.check_request()
             # 不断更新电梯运行状态
             self.update_direction()
 
             if self.direction != 0:
-                # 电梯在运行中
+                # 电梯在运行中时楼层数改变
                 self.current_floor += self.direction
-                # self.check_open()
 
             elif not self.Rotate_Exist == 0:
 
-                # 电梯空闲且存在轮转时，执行轮转调度
+                # 电梯空闲且之前存在轮转时，执行轮转调度
                 self.destination = self.Rotate_Destination
 
                 # 还原轮转标志
@@ -245,4 +246,4 @@ class Elevator(object):
             
             QtWidgets.QApplication.processEvents()
             # 电梯移动速度控制
-            time.sleep(0.4)
+            time.sleep(1)

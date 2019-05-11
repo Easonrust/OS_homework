@@ -12,19 +12,19 @@ class myWindow(QMainWindow, Ui_Form):
         # 五部电梯房间按钮连接自己的电梯操纵函数函数
         for i in range(5):
             for j in range(20):
-                self.controller.elevator[i].roombutton[j].clicked.connect(
-                    self.controller.elevator[i].operate_ele)
+                self.dispatcher.elevator[i].roombutton[j].clicked.connect(
+                    self.dispatcher.elevator[i].operate_ele)
 
         # 五部电梯开门按钮连接函数
         for i in range(5):
-            self.controller.elevator[i].openButton.clicked.connect(
-                self.controller.elevator[i].open_door)
+            self.dispatcher.elevator[i].openButton.clicked.connect(
+                self.dispatcher.elevator[i].open_door)
 
         # 每层楼召唤电梯按钮连接函数
         for i in range(20):
             for j in range(2):
                 if not (j == 0 and i == 19)and not (j == 1 and i == 0):
-                    self.floorButton[i][j].clicked.connect(self.controller.call_ele)
+                    self.floorButton[i][j].clicked.connect(self.dispatcher.call_ele)
 
  
 
