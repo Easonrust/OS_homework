@@ -26,7 +26,7 @@
 
 界面右侧为5部电梯，每部电梯包含一套按钮表，其中数字1-20的按钮代表楼层按钮，开关按钮按下后，电梯可在所停楼层开门2秒钟；按钮表上方配备有状态显示栏，用来显示电梯的楼层和运行状态（开门，向上运行，向下运行）；按钮表右侧为电梯房间的图形显示。
 
-![界面](https://github.com/Easonrust/OS_homework/blob/master/elevator_dispatch/img/%E7%95%8C%E9%9D%A2.png)
+![界面](D:\OS_homework\elevator_dispatch\img\界面.png)
 
 ## 调度算法设计
 
@@ -39,6 +39,10 @@
 1. 从正在运行的电梯中进行寻找，找出运行会经过该楼层且离该楼层最近的电梯。若有此类电梯，向其发送请求；否则，进入下一步。
 2. 从空闲状态的电梯中进行寻找，找出离该楼层最近的电梯。若有此类电梯，向其发送请求；否则，进入下一步。
 3. 此时，所有电梯均为运行状态且不会经过该楼层，因此采用轮转算法，将该楼层记录到轮转目的地中，等到某一电梯空闲时，响应该轮转目的地的请求。
+
+算法流程图如下：
+
+![floor_dispatch](D:\OS_homework1\floor_dispatch.png)
 
 ### 电梯房间按钮事件
 
@@ -59,6 +63,10 @@
 3. 该楼层为电梯当前楼层：
 
    电梯房间发出开门请求。
+
+算法流程图如下：
+
+![room_dispatch](D:\OS_homework1\room_dispatch.png)
 
 ## 程序结构设计
 
@@ -237,7 +245,7 @@ if Direction*self.direction < 0:
 
 测试样例：
 
-![楼层轮转](https://github.com/Easonrust/OS_homework/blob/master/elevator_dispatch/img/%E6%A5%BC%E5%B1%82%E8%BD%AE%E8%BD%AC.png)
+![楼层轮转](D:\OS_homework\elevator_dispatch\img\楼层轮转.png)
 
 此时5部电梯均向上运行，分别在1层，2层，3层按下按钮。
 
@@ -245,13 +253,13 @@ if Direction*self.direction < 0:
 
 实际结果：
 
-![楼层轮转实际结果](https://github.com/Easonrust/OS_homework/blob/master/elevator_dispatch/img/%E6%A5%BC%E5%B1%82%E8%BD%AE%E8%BD%AC%E5%AE%9E%E9%99%85%E7%BB%93%E6%9E%9C.png)
+![楼层轮转实际结果](D:\OS_homework\elevator_dispatch\img\楼层轮转实际结果.png)
 
 ### 电梯内部轮转
 
 测试样例：
 
-![内部轮转](https://github.com/Easonrust/OS_homework/blob/master/elevator_dispatch/img/%E5%86%85%E9%83%A8%E8%BD%AE%E8%BD%AC.png)
+![内部轮转](D:\OS_homework\elevator_dispatch\img\内部轮转.png)
 
 电梯此时向上运行，在以经过3层的情况下，按下3层的按键。
 
@@ -259,7 +267,7 @@ if Direction*self.direction < 0:
 
 实际结果：
 
-![内部轮转实际结果](https://github.com/Easonrust/OS_homework/blob/master/elevator_dispatch/img/%E5%86%85%E9%83%A8%E8%BD%AE%E8%BD%AC%E5%AE%9E%E9%99%85%E7%BB%93%E6%9E%9C.png)
+![内部轮转实际结果](D:\OS_homework\elevator_dispatch\img\内部轮转实际结果.png)
 
 ## 不足之处
 
