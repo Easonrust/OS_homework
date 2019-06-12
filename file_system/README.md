@@ -139,7 +139,7 @@
 
 ### 4.3 文本编辑器
 
-![text]((https://github.com/Easonrust/OS_homework/blob/master/file_system/img/text.png)
+![text](https://github.com/Easonrust/OS_homework/blob/master/file_system/img/text.png)
 
 用户打开选中的文本文件后，会出现简易的文本编辑器，用户在输入框中输入内容后，点击保存键，在关闭窗口，即可写入文本文件。
 
@@ -691,27 +691,27 @@ namespace file_system
 
 ### 6.1 创建文件
 
-![createFile]((https://github.com/Easonrust/OS_homework/blob/master/file_system/img/createFile.png)
+![createFile](https://github.com/Easonrust/OS_homework/blob/master/file_system/img/createFile.png)
 
 ### 6.2 写入文本文件
 
-![writeFile]((https://github.com/Easonrust/OS_homework/blob/master/file_system/img/writeFile.png)
+![writeFile](https://github.com/Easonrust/OS_homework/blob/master/file_system/img/writeFile.png)
 
-![effect1]((https://github.com/Easonrust/OS_homework/blob/master/file_system/img/effect1.png)
+![effect1](https://github.com/Easonrust/OS_homework/blob/master/file_system/img/effect1.png)
 
 ### 6.3 重命名文件
 
-![Rename]((https://github.com/Easonrust/OS_homework/blob/master/file_system/img/Rename.png)
+![Rename](https://github.com/Easonrust/OS_homework/blob/master/file_system/img/Rename.png)
 
-![effect2]((https://github.com/Easonrust/OS_homework/blob/master/file_system/img/effect2.png)
+![effect2](https://github.com/Easonrust/OS_homework/blob/master/file_system/img/effect2.png)
 
 ### 6.4 更改当前目录
 
-![changecatalog]((https://github.com/Easonrust/OS_homework/blob/master/file_system/img/changecatalog.png)
+![changecatalog](https://github.com/Easonrust/OS_homework/blob/master/file_system/img/changecatalog.png)
 
 ### 6.5 删除目录
 
-![erase]((https://github.com/Easonrust/OS_homework/blob/master/file_system/img/erase.png)
+![erase](https://github.com/Easonrust/OS_homework/blob/master/file_system/img/erase.png)
 
 ## 7. 运行环境
 
