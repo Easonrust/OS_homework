@@ -99,7 +99,7 @@
 
 #### 3.2.4 算法流程图
 
-![未命名文件 (1)](C:\Users\yangl\Desktop\未命名文件 (1).png)
+![未命名文件 (1)](https://github.com/Easonrust/OS_homework/blob/master/memory_management/img/flow.png)
 
 ## 4. 核心代码
 
@@ -222,7 +222,7 @@
 ## 5. 程序测试
 ### 5.1 使用说明
 
-![face](C:\Users\yangl\Desktop\face.png)
+![face](https://github.com/Easonrust/OS_homework/blob/master/memory_management/img/face.png)
 
 1. 最上面四个方框显示相应内存块中当前页面的页号。当为-1时代表当前内存块中不存在任何页面。
 2. **Current Instructions**下的方框显示当前指令的地址，**Page**下面的方框显示当前指令所在的页面。
@@ -235,11 +235,11 @@
 
 ### 5.2 首先随机生成第一条指令序列
 
-![1](C:\Users\yangl\Desktop\1.png)
+![1](https://github.com/Easonrust/OS_homework/blob/master/memory_management/img/1.png)
 
 ### 5.3 执行下一条指令
 
-![2](C:\Users\yangl\Desktop\2.png)
+![2](https://github.com/Easonrust/OS_homework/blob/master/memory_management/img/2.png)
 
 ## 6. 开发环境
 
