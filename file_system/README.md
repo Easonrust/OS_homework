@@ -115,7 +115,7 @@
 
 ### 4.1 主界面
 
-![interface](C:\Users\yangl\Desktop\interface.png)
+![interface](https://github.com/Easonrust/OS_homework/blob/master/file_system/img/interface.png)
 
 其中最上一栏为菜单栏，模仿windows自带文件系统：
 
@@ -133,13 +133,13 @@
 
 ### 4.2 重命名输入框
 
-![renameface](C:\Users\yangl\Desktop\renameface.png)
+![renameface](https://github.com/Easonrust/OS_homework/blob/master/file_system/img/renameface.png)
 
 用户在为选中文件重命名时只需在文本框中输入名称，再点击确定键，最后关闭窗口，即可实现重命名。
 
 ### 4.3 文本编辑器
 
-![text](C:\Users\yangl\Desktop\text.png)
+![text]((https://github.com/Easonrust/OS_homework/blob/master/file_system/img/text.png)
 
 用户打开选中的文本文件后，会出现简易的文本编辑器，用户在输入框中输入内容后，点击保存键，在关闭窗口，即可写入文本文件。
 
@@ -691,27 +691,27 @@ namespace file_system
 
 ### 6.1 创建文件
 
-![createFile](C:\Users\yangl\Desktop\createFile.png)
+![createFile]((https://github.com/Easonrust/OS_homework/blob/master/file_system/img/createFile.png)
 
 ### 6.2 写入文本文件
 
-![writeFile](C:\Users\yangl\Desktop\writeFile.png)
+![writeFile]((https://github.com/Easonrust/OS_homework/blob/master/file_system/img/writeFile.png)
 
-![effect1](C:\Users\yangl\Desktop\effect1.png)
+![effect1]((https://github.com/Easonrust/OS_homework/blob/master/file_system/img/effect1.png)
 
 ### 6.3 重命名文件
 
-![Rename](C:\Users\yangl\Desktop\Rename.png)
+![Rename]((https://github.com/Easonrust/OS_homework/blob/master/file_system/img/Rename.png)
 
-![effect2](C:\Users\yangl\Desktop\effect2.png)
+![effect2]((https://github.com/Easonrust/OS_homework/blob/master/file_system/img/effect2.png)
 
 ### 6.4 更改当前目录
 
-![changecatalog](C:\Users\yangl\Desktop\changecatalog.png)
+![changecatalog]((https://github.com/Easonrust/OS_homework/blob/master/file_system/img/changecatalog.png)
 
 ### 6.5 删除目录
 
-![erase](C:\Users\yangl\Desktop\erase.png)
+![erase]((https://github.com/Easonrust/OS_homework/blob/master/file_system/img/erase.png)
 
 ## 7. 运行环境
 
